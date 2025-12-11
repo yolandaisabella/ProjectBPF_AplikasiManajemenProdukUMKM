@@ -10,6 +10,13 @@
     </a>
 </div>
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Overview</li>
+  </ol>
+</nav>
+
 <div class="row">
 
     <div class="col-xl-3 col-md-6 mb-4">
@@ -78,6 +85,59 @@
         </div>
     </div>
 
+</div>
+
+<div class="row">
+  <div class="col-xl-12 col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-area">
+          <canvas id="myAreaChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-6 col-lg-6">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-bar">
+          <canvas id="myBarChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-lg-6">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-pie pt-4 pb-2">
+          <canvas id="myPieChart"></canvas>
+        </div>
+        <div class="mt-4 text-center small">
+          <span class="mr-2">
+            <i class="fas fa-circle text-primary"></i> Direct
+          </span>
+          <span class="mr-2">
+            <i class="fas fa-circle text-success"></i> Social
+          </span>
+          <span class="mr-2">
+            <i class="fas fa-circle text-info"></i> Referral
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row">
@@ -176,4 +236,9 @@
 
 </div>
 </div>
+@push('scripts')
+<script src="{{ asset('assets-admin/js/demo/chart-area-demo.js') }}"></script>
+<script src="{{ asset('assets-admin/js/demo/chart-bar-demo.js') }}"></script>
+<script src="{{ asset('assets-admin/js/demo/chart-pie-demo.js') }}"></script>
+@endpush
 @endsection
