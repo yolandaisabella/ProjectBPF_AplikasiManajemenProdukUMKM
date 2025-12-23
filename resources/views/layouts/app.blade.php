@@ -36,18 +36,35 @@
 
         <div class="sidebar-heading">Manajemen</div>
 
-        <li class="nav-item {{ request()->is('products*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('products.index') }}">
+        <li class="nav-item {{ request()->is('admin/product*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.product.index') }}">
                 <i class="fas fa-fw fa-box"></i>
                 <span>Produk</span>
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link" href="#">
+        <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.users.index') }}">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Pengguna</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ request()->is('reports') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.reports') }}">
                 <i class="fas fa-fw fa-chart-bar"></i>
                 <span>Laporan</span>
             </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="event.preventDefault(); if(confirm('Yakin ingin keluar?')) { document.getElementById('logout-form').submit(); }">
+                <i class="fas fa-fw fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </li>
 
         <hr class="sidebar-divider d-none d-md-block">

@@ -2,80 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\Item;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Get dashboard statistics
-        $totalProducts = Product::count();
-        $lowStockProducts = Product::where('stock', '<', 10)->count();
-        $totalCategories = Product::distinct('category')->count('category');
-        $totalValue = Product::sum(DB::raw('price * stock'));
-
-        // Get recent products (last 5)
-        $recentProducts = Product::orderBy('created_at', 'desc')->take(5)->get();
-
-        return view('admin.dashboard', compact(
-            'totalProducts',
-            'lowStockProducts',
-            'totalCategories',
-            'totalValue',
-            'recentProducts'
-        ));
+        if (Auth::check()) {
+            $role = Auth::user()->role;
+            if ($role === 'admin') {
+                return view('admin.dashboard', [
+                    'totalProducts' => Item::count(),
+                    'totalCategories' => Category::count(),
+                    'totalUsers' => User::count(),
+                    'lowStockProducts' => Item::where('stock', '<', 10)->count(),
+                    'featuredProducts' => Item::with('category')->take(6)->get(),
+                ]);
+            } elseif ($role === 'staff') {
+                return view('staff.dashboard', [
+                    'totalProducts' => Item::count(),
+                    'lowStockProducts' => Item::where('stock', '<', 10)->count(),
+                    'featuredProducts' => Item::with('category')->take(6)->get(),
+                ]);
+            } elseif ($role === 'guest') {
+                return $this->guestDashboard();
+            }
+        } else {
+            // Public access for guest dashboard
+            return $this->guestDashboard();
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function reports()
     {
-        //
+        $totalProducts = Item::count();
+        $totalCategories = Category::count();
+        $totalUsers = User::count();
+        $lowStockProducts = Item::where('stock', '<', 10)->count();
+
+        return view('admin.reports', compact('totalProducts', 'totalCategories', 'totalUsers', 'lowStockProducts'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    private function guestDashboard()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $featuredProducts = Item::with('category')->take(6)->get();
+        return view('guest.dashboard', compact('featuredProducts'));
     }
 }

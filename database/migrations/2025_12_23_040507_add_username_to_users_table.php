@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'role')) {
-                $table->enum('role', ['admin', 'staff', 'guest'])
-                      ->default('guest')
-                      ->after('password');
-            }
+            $table->string('username')->unique()->after('name');
         });
     }
 
@@ -25,10 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'role')) {
-                $table->dropColumn('role');
-            }
+        Schema::table('users_tabl', function (Blueprint $table) {
+            //
         });
     }
 };

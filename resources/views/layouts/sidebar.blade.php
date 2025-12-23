@@ -9,8 +9,8 @@
 
     <hr class="sidebar-divider my-0">
 
-    <li class="nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+    <li class="nav-item {{ request()->is('guest/dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('guest.dashboard') }}">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
@@ -27,8 +27,18 @@
 
     <hr class="sidebar-divider d-none d-md-block">
 
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    </li>
+
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
-    
+
 </ul>

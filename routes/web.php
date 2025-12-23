@@ -2,8 +2,81 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::resource('products', ProductController::class);
+use App\Http\Controllers\GuestItemController;
+use App\Http\Controllers\AuthController;
 
+// Root route - redirects to dashboard
+Route::get('/', [DashboardController::class, 'index'])->name('home');
+
+// Root dashboard route - redirects based on authentication/role
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('users', UserController::class)->names([
+        'index' => 'admin.users.index',
+        'create' => 'admin.users.create',
+        'store' => 'admin.users.store',
+        'show' => 'admin.users.show',
+        'edit' => 'admin.users.edit',
+        'update' => 'admin.users.update',
+        'destroy' => 'admin.users.destroy',
+    ]);
+    Route::resource('categories', CategoryController::class)->names([
+        'index' => 'admin.categories.index',
+        'create' => 'admin.categories.create',
+        'store' => 'admin.categories.store',
+        'show' => 'admin.categories.show',
+        'edit' => 'admin.categories.edit',
+        'update' => 'admin.categories.update',
+        'destroy' => 'admin.categories.destroy',
+    ]);
+    Route::resource('product', ProductController::class)->names([
+        'index' => 'admin.product.index',
+        'create' => 'admin.product.create',
+        'store' => 'admin.product.store',
+        'show' => 'admin.product.show',
+        'edit' => 'admin.product.edit',
+        'update' => 'admin.product.update',
+        'destroy' => 'admin.product.destroy',
+    ]);
+    Route::get('/reports', [DashboardController::class, 'reports'])->name('admin.reports');
+});
+
+Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
+    Route::get('/items', [GuestItemController::class, 'index'])->name('staff.items.index');
+    Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('staff.items.show');
+});
+
+Route::prefix('guest')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
+    Route::get('/items', [GuestItemController::class, 'index'])->name('guest.items.index');
+    Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('guest.items.show');
+});
+
+Route::get('/login', [AuthController::class, 'login'])
+    ->name('login');
+
+Route::post('/login', [AuthController::class, 'loginProcess'])
+    ->name('login.process');
+
+Route::get('/register', [AuthController::class, 'register'])
+    ->name('register');
+
+Route::post('/register', [AuthController::class, 'registerProcess'])
+    ->name('register.process');
+
+Route::get('/register/staff', [AuthController::class, 'registerStaff'])
+    ->name('register.staff');
+
+Route::post('/register/staff', [AuthController::class, 'registerStaffProcess'])
+    ->name('register.staff.process');
+
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
