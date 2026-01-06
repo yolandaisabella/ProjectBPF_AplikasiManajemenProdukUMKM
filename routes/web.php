@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\GuestItemController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\AuthController;
 
 // Root route - redirects to dashboard
@@ -26,15 +28,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         'update' => 'admin.users.update',
         'destroy' => 'admin.users.destroy',
     ]);
-    Route::resource('categories', CategoryController::class)->names([
-        'index' => 'admin.categories.index',
-        'create' => 'admin.categories.create',
-        'store' => 'admin.categories.store',
-        'show' => 'admin.categories.show',
-        'edit' => 'admin.categories.edit',
-        'update' => 'admin.categories.update',
-        'destroy' => 'admin.categories.destroy',
-    ]);
+
     Route::resource('product', ProductController::class)->names([
         'index' => 'admin.product.index',
         'create' => 'admin.product.create',
@@ -51,12 +45,17 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
     Route::get('/items', [GuestItemController::class, 'index'])->name('staff.items.index');
     Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('staff.items.show');
+    Route::get('/products', [ProductController::class, 'index'])->name('staff.products.index');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('staff.products.show');
+    Route::get('/users', [StaffController::class, 'users'])->name('staff.users');
+    Route::get('/reports', [StaffController::class, 'reports'])->name('staff.reports');
 });
 
-Route::prefix('guest')->group(function () {
+Route::middleware(['auth', 'role:guest'])->prefix('guest')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
-    Route::get('/items', [GuestItemController::class, 'index'])->name('guest.items.index');
-    Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('guest.items.show');
+    Route::get('/products', [GuestController::class, 'products'])->name('guest.products.index');
+    Route::get('/users', [GuestController::class, 'users'])->name('guest.users');
+    Route::get('/reports', [GuestController::class, 'reports'])->name('guest.reports');
 });
 
 Route::get('/login', [AuthController::class, 'login'])
@@ -77,6 +76,9 @@ Route::get('/register/staff', [AuthController::class, 'registerStaff'])
 Route::post('/register/staff', [AuthController::class, 'registerStaffProcess'])
     ->name('register.staff.process');
 
+
+Route::get('/logout/confirm', [AuthController::class, 'logoutConfirm'])
+    ->name('logout.confirm');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');

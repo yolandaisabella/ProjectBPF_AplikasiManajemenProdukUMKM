@@ -11,52 +11,68 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $items = Item::with('category')->paginate(10);
-        return view('admin.product.index', compact('items'));
+        $products = Product::paginate(10);
+        return view('admin.product.index', compact('products'));
     }
 
     public function create()
     {
-        $categories = Category::all();
-        return view('admin.product.create', compact('categories'));
+        return view('admin.product.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'nullable|string',
+        ];
+
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+        }
+
+        $request->validate($rules, [
+            'image.image' => 'File yang dipilih harus berupa gambar.',
+            'image.mimes' => 'Gambar harus berformat jpeg, png, jpg, atau gif.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
-        Item::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'description' => $request->description,
-        ]);
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Product::create($data);
 
         return redirect()->route('admin.product.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
-    public function edit(Item $product)
+    public function edit(Product $product)
     {
-        $categories = Category::all();
-        return view('admin.product.edit', compact('product','categories'));
+        return view('admin.product.edit', compact('product'));
     }
 
-    public function update(Request $request, Item $product)
+    public function update(Request $request, Product $product)
     {
-        $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+        }
+
+        $request->validate($rules, [
+            'image.image' => 'File yang dipilih harus berupa gambar.',
+            'image.mimes' => 'Gambar harus berformat jpeg, png, jpg, atau gif.',
+            'image.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         $data = $request->all();
@@ -70,9 +86,14 @@ class ProductController extends Controller
         return redirect()->route('admin.product.index')->with('success', 'Produk berhasil diupdate');
     }
 
-    public function destroy(Item $product)
+    public function destroy(Product $product)
     {
         $product->delete();
         return back()->with('success', 'Produk berhasil dihapus');
+    }
+
+    public function show(Item $product)
+    {
+        return view('admin.product.show', compact('product'));
     }
 }

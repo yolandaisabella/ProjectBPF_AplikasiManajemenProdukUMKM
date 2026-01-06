@@ -36,10 +36,6 @@
                         <div class="col-md-6">
                             <h5 class="card-title">{{ $item->name }}</h5>
                             <p class="card-text">
-                                <strong>Kategori:</strong>
-                                <span class="badge badge-secondary">{{ $item->category->name ?? 'N/A' }}</span>
-                            </p>
-                            <p class="card-text">
                                 <strong>Harga:</strong> Rp {{ number_format($item->price, 0, ',', '.') }}
                             </p>
                             <p class="card-text">

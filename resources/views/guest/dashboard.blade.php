@@ -44,13 +44,20 @@
                             @forelse($featuredProducts as $product)
                                 <div class="col-xl-4 col-md-6 mb-4">
                                     <div class="card h-100">
+                                        <div class="card-img-top" style="height: 200px; overflow: hidden;">
+                                            @if($product->image)
+                                                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                            @else
+                                                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="No Image">
+                                            @endif
+                                        </div>
                                         <div class="card-body">
                                             <h5 class="card-title">{{ $product->name }}</h5>
                                             <p class="card-text">{{ Str::limit($product->description, 100) }}</p>
                                             <p class="card-text"><strong>Price: Rp
                                                     {{ number_format($product->price, 0, ',', '.') }}</strong></p>
                                             <p class="card-text">Stock: {{ $product->stock }}</p>
-                                            <a href="{{ route('guest.items.show', $product) }}"
+                                            <a href="{{ route('guest.products.index') }}"
                                                 class="btn btn-primary">View Details</a>
                                         </div>
                                     </div>

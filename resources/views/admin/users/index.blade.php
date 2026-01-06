@@ -71,9 +71,6 @@
                                         <td>{{ $user->created_at->format('d M Y') }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.users.show', $user) }}" class="btn btn-sm btn-info" title="Lihat">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                                 <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>

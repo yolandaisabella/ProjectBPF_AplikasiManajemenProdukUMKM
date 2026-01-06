@@ -34,9 +34,6 @@
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                     {{ $item->name }}
                                                 </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    Kategori: {{ $item->category->name }}
-                                                </div>
                                                 <div class="text-xs text-muted mb-2">
                                                     Harga: Rp {{ number_format($item->price, 0, ',', '.') }}
                                                 </div>

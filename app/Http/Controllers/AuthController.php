@@ -36,6 +36,11 @@ class AuthController extends Controller
         return back()->with('error', 'Username atau password salah');
     }
 
+    public function logoutConfirm()
+    {
+        return view('auth.logout_confirm');
+    }
+
     public function logout()
     {
         Auth::logout();

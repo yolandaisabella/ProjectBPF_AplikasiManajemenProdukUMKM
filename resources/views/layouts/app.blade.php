@@ -36,36 +36,35 @@
 
         <div class="sidebar-heading">Manajemen</div>
 
-        <li class="nav-item {{ request()->is('admin/product*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.product.index') }}">
-                <i class="fas fa-fw fa-box"></i>
-                <span>Produk</span>
-            </a>
-        </li>
+        @if(auth()->check())
+            <li class="nav-item {{ request()->is('admin/product*', 'staff/products*', 'guest/products') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ auth()->user()->role == 'admin' ? route('admin.product.index') : (auth()->user()->role == 'staff' ? route('staff.products.index') : route('guest.products.index')) }}">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Produk</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->is('admin/users*', 'staff/users', 'guest/users') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ auth()->user()->role == 'admin' ? route('admin.users.index') : (auth()->user()->role == 'staff' ? route('staff.users') : route('guest.users')) }}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Pengguna</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->is('admin/reports', 'staff/reports', 'guest/reports') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ auth()->user()->role == 'admin' ? route('admin.reports') : (auth()->user()->role == 'staff' ? route('staff.reports') : route('guest.reports')) }}">
+                    <i class="fas fa-fw fa-chart-bar"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
+        @endif
 
-        <li class="nav-item {{ request()->is('users*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.users.index') }}">
-                <i class="fas fa-fw fa-users"></i>
-                <span>Pengguna</span>
-            </a>
-        </li>
-
-        <li class="nav-item {{ request()->is('reports') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('admin.reports') }}">
-                <i class="fas fa-fw fa-chart-bar"></i>
-                <span>Laporan</span>
-            </a>
-        </li>
-
+        @if(auth()->check())
         <li class="nav-item">
-            <a class="nav-link" href="#" onclick="event.preventDefault(); if(confirm('Yakin ingin keluar?')) { document.getElementById('logout-form').submit(); }">
+            <a class="nav-link" href="{{ route('logout.confirm') }}">
                 <i class="fas fa-fw fa-sign-out-alt"></i>
                 <span>Logout</span>
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
         </li>
+        @endif
 
         <hr class="sidebar-divider d-none d-md-block">
 

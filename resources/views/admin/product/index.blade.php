@@ -1,6 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Error Modal -->
+@if(session('error'))
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Akses Ditolak</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{ session('error') }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -40,13 +62,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if($items->count() > 0)
+                    @if($products->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Nama Produk</th>
-                                        <th>Kategori</th>
                                         <th>Harga</th>
                                         <th>Stok</th>
                                         <th>Dibuat</th>
@@ -54,32 +75,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($items as $item)
+                                    @foreach($products as $product)
                                     <tr>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                         <td>
-                                            <span class="badge badge-secondary">{{ $item->category->name ?? 'N/A' }}</span>
-                                        </td>
-                                        <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
-                                        <td>
-                                            @if($item->stock > 10)
-                                                <span class="badge badge-success">{{ $item->stock }}</span>
-                                            @elseif($item->stock > 0)
-                                                <span class="badge badge-warning">{{ $item->stock }}</span>
+                                            @if($product->stock > 10)
+                                                <span class="badge badge-success">{{ $product->stock }}</span>
+                                            @elseif($product->stock > 0)
+                                                <span class="badge badge-warning">{{ $product->stock }}</span>
                                             @else
-                                                <span class="badge badge-danger">{{ $item->stock }}</span>
+                                                <span class="badge badge-danger">{{ $product->stock }}</span>
                                             @endif
                                         </td>
-                                        <td>{{ $item->created_at->format('d M Y') }}</td>
+                                        <td>{{ $product->created_at->format('d M Y') }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{{ route('admin.product.show', $item) }}" class="btn btn-sm btn-info" title="Lihat">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                                <a href="{{ route('admin.product.edit', $item) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-sm btn-warning" title="Edit">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus" onclick="confirmDelete({{ $item->id }}, '{{ $item->name }}')">
+                                                <button type="button" class="btn btn-sm btn-danger" title="Hapus" onclick="confirmDelete({{ $product->id }}, '{{ $product->name }}')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </div>
@@ -90,7 +105,7 @@
                             </table>
                         </div>
                         <div class="d-flex justify-content-center">
-                            {{ $items->links() }}
+                            {{ $products->links() }}
                         </div>
                     @else
                         <div class="text-center py-5">

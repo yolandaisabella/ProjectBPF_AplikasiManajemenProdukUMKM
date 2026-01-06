@@ -1,4 +1,4 @@
-@extends('layouts.app')
+masu@extends('layouts.app')
 
 @section('content')
 <div class="container-fluid">
@@ -47,7 +47,6 @@
                                     <tr>
                                         <th>Gambar</th>
                                         <th>Nama Produk</th>
-                                        <th>Kategori</th>
                                         <th>Harga</th>
                                         <th>Stok</th>
                                         <th>Status</th>
@@ -67,9 +66,6 @@
                                             @endif
                                         </td>
                                         <td>{{ $product->name }}</td>
-                                        <td>
-                                            <span class="badge badge-info">{{ $product->category }}</span>
-                                        </td>
                                         <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                                         <td>{{ $product->stock }}</td>
                                         <td>

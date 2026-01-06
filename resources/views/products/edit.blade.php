@@ -34,24 +34,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="category" class="form-label">Kategori <span class="text-danger">*</span></label>
-                                    <select class="form-control @error('category') is-invalid @enderror"
-                                            id="category" name="category" required>
-                                        <option value="">Pilih Kategori</option>
-                                        <option value="Makanan" {{ old('category', $product->category) == 'Makanan' ? 'selected' : '' }}>Makanan</option>
-                                        <option value="Minuman" {{ old('category', $product->category) == 'Minuman' ? 'selected' : '' }}>Minuman</option>
-                                        <option value="Pakaian" {{ old('category', $product->category) == 'Pakaian' ? 'selected' : '' }}>Pakaian</option>
-                                        <option value="Elektronik" {{ old('category', $product->category) == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
-                                        <option value="Kerajinan" {{ old('category', $product->category) == 'Kerajinan' ? 'selected' : '' }}>Kerajinan</option>
-                                        <option value="Lainnya" {{ old('category', $product->category) == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                                    </select>
-                                    @error('category')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+
                         </div>
 
                         <div class="form-group mb-3">
@@ -239,26 +222,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Real-time preview
     const nameInput = document.getElementById('name');
-    const categorySelect = document.getElementById('category');
     const priceInput = document.getElementById('price');
     const stockInput = document.getElementById('stock');
     const imageInput = document.getElementById('image');
 
     const previewName = document.getElementById('preview-name');
-    const previewCategory = document.getElementById('preview-category');
     const previewPrice = document.getElementById('preview-price');
     const previewStock = document.getElementById('preview-stock');
     const imagePreview = document.getElementById('image-preview');
 
     function updatePreview() {
         if (previewName) previewName.textContent = nameInput.value || 'Nama Produk';
-        if (previewCategory) previewCategory.textContent = categorySelect.value || 'Kategori';
         if (previewPrice) previewPrice.textContent = 'Rp ' + (priceInput.value ? new Intl.NumberFormat('id-ID').format(priceInput.value) : '0');
         if (previewStock) previewStock.textContent = 'Stok: ' + (stockInput.value || '0');
     }
 
     nameInput.addEventListener('input', updatePreview);
-    categorySelect.addEventListener('change', updatePreview);
     priceInput.addEventListener('input', updatePreview);
     stockInput.addEventListener('input', updatePreview);
 

@@ -1,0 +1,7 @@
+- [x] Remove the view action (eye icon button) from the admin users index page in resources/views/admin/users/index.blade.php
+- [x] Fix missing edit method in UserController and create edit view
+- [x] Update edit form to match registration form style
+- [x] Remove category fields and displays from admin, staff, and guest views
+- [x] Add image preview to product create form
+- [x] Fix product management display by linking dashboard to products
+- [x] Update Item model to include image in fillable

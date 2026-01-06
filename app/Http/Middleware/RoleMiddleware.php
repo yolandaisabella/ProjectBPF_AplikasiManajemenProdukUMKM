@@ -22,7 +22,13 @@ class RoleMiddleware
 
         $user = Auth::user();
 
-        if (!$user->hasRole($role)) {
+        if ($user->role !== $role) {
+            if ($user->role === 'staff') {
+                return redirect()->route('staff.dashboard')->with('error', 'Anda tidak memiliki akses untuk masuk ke halaman tersebut.');
+            }
+            if ($user->role === 'guest') {
+                return redirect()->route('guest.dashboard')->with('error', 'Anda tidak memiliki akses untuk masuk ke halaman tersebut.');
+            }
             abort(403, 'Unauthorized');
         }
 

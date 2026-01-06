@@ -25,6 +25,26 @@ class UserController extends Controller
         return back()->with('success', 'User berhasil ditambahkan');
     }
 
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'role' => $request->role,
+        ]);
+
+        if ($request->password) {
+            $user->update(['password' => bcrypt($request->password)]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui');
+    }
+
     public function destroy(User $user)
     {
         $user->delete();
