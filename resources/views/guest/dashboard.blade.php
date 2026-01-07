@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+t
 @section('content')
     <div class="container-fluid">
 
@@ -30,6 +30,10 @@
                 <h1 class="h3 mb-0 text-gray-800">Selamat Datang di UMKM Kopi Kami</h1>
                 <p class="mb-0">Nikmati berbagai jenis kopi berkualitas dari berbagai daerah Indonesia</p>
             </div>
+            <div class="d-flex">
+                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" alt="Kopi Espresso" class="img-fluid mr-2" style="max-height: 100px;">
+                <img src="{{ asset('assets-admin/img/americano.png') }}" alt="Kopi Americano" class="img-fluid" style="max-height: 100px;">
+            </div>
         </div>
 
         <!-- Featured Coffee -->
@@ -48,7 +52,11 @@
                                             @if($product->image)
                                                 <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
                                             @else
-                                                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="No Image">
+                                                @if(str_contains(strtolower($product->name), 'americano'))
+                                                    <img src="{{ asset('assets-admin/img/americano.png') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @else
+                                                    <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @endif
                                             @endif
                                         </div>
                                         <div class="card-body">

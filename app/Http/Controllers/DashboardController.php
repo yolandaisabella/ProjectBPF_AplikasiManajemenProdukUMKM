@@ -19,12 +19,14 @@ class DashboardController extends Controller
                     'totalUsers' => User::count(),
                     'lowStockProducts' => Product::where('stock', '<', 10)->count(),
                     'featuredProducts' => Product::orderBy('created_at', 'desc')->take(6)->get(),
+                    'latestProduct' => Product::latest()->first(),
                 ]);
             } elseif ($role === 'staff') {
                 return view('staff.dashboard', [
                     'totalProducts' => Product::count(),
                     'lowStockProducts' => Product::where('stock', '<', 10)->count(),
                     'featuredProducts' => Product::orderBy('created_at', 'desc')->take(6)->get(),
+                    'latestProduct' => Product::latest()->first(),
                 ]);
             } elseif ($role === 'guest') {
                 return $this->guestDashboard();

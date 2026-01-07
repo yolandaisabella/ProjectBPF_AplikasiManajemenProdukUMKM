@@ -6,7 +6,59 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <div class="d-flex">
+                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" alt="Kopi Espresso" class="img-fluid mr-2" style="max-height: 100px;">
+                <img src="{{ asset('assets-admin/img/americano.png') }}" alt="Kopi Americano" class="img-fluid" style="max-height: 100px;">
+            </div>
         </div>
+
+        <!-- Success Message -->
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
+        <!-- Latest Product Highlight -->
+        @if(isset($latestProduct))
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">Produk Terbaru</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                @if($latestProduct->image)
+                                    @if(str_starts_with($latestProduct->image, 'products/'))
+                                        <img src="{{ asset('storage/' . $latestProduct->image) }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
+                                    @else
+                                        <img src="{{ asset($latestProduct->image) }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
+                                    @endif
+                                @else
+                                    @if(str_contains(strtolower($latestProduct->name), 'americano'))
+                                        <img src="{{ asset('assets-admin/img/americano.png') }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
+                                    @else
+                                        <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
+                                    @endif
+                                @endif
+                            </div>
+                            <div class="col-md-8">
+                                <h5 class="card-title">{{ $latestProduct->name }}</h5>
+                                <p class="card-text">{{ Str::limit($latestProduct->description, 200) }}</p>
+                                <p class="card-text"><strong>Rp {{ number_format($latestProduct->price, 0, ',', '.') }}</strong></p>
+                                <p class="card-text"><small class="text-muted">Stok: {{ $latestProduct->stock }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
 
         <!-- Featured Products Section -->
         <div class="row">
@@ -29,7 +81,11 @@
                                                     <img src="{{ asset($product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
                                                 @endif
                                             @else
-                                                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="No Image">
+                                                @if(str_contains(strtolower($product->name), 'americano'))
+                                                    <img src="{{ asset('assets-admin/img/americano.png') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @else
+                                                    <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @endif
                                             @endif
                                         </div>
                                         <div class="card-body">

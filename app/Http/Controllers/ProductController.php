@@ -48,7 +48,7 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return redirect()->route('admin.product.index')->with('success', 'Produk berhasil ditambahkan');
+        return redirect()->route('admin.dashboard')->with('success', 'Produk berhasil ditambahkan dan muncul di dashboard');
     }
 
     public function edit(Product $product)

@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-
 use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\GuestItemController;
@@ -46,6 +45,8 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
     Route::get('/items', [GuestItemController::class, 'index'])->name('staff.items.index');
     Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('staff.items.show');
     Route::get('/products', [ProductController::class, 'index'])->name('staff.products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('staff.products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('staff.products.store');
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('staff.products.show');
     Route::get('/users', [StaffController::class, 'users'])->name('staff.users');
     Route::get('/reports', [StaffController::class, 'reports'])->name('staff.reports');
