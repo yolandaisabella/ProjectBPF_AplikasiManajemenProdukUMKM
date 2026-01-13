@@ -6,10 +6,10 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Detail Produk</h1>
         <div>
-            <a href="{{ route('admin.items.edit', $item) }}" class="btn btn-warning btn-sm">
+            <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-warning btn-sm">
                 <i class="fas fa-edit"></i> Edit
             </a>
-            <a href="{{ route('admin.items.index') }}" class="btn btn-secondary btn-sm">
+            <a href="{{ route('admin.product.index') }}" class="btn btn-secondary btn-sm">
                 <i class="fas fa-arrow-left"></i> Kembali
             </a>
         </div>
@@ -19,8 +19,8 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('admin.items.index') }}">Produk</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $item->name }}</li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.product.index') }}">Produk</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
         </ol>
     </nav>
 
@@ -33,35 +33,49 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="card-title">{{ $item->name }}</h5>
+                        <div class="col-md-4">
+                            @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded mb-3" alt="{{ $product->name }}">
+                            @else
+                                <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid rounded mb-3" alt="{{ $product->name }}">
+                            @endif
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="card-title">{{ $product->name }}</h5>
                             <p class="card-text">
-                                <strong>Harga:</strong> Rp {{ number_format($item->price, 0, ',', '.') }}
+                                <strong>Harga:</strong> Rp {{ number_format($product->price, 0, ',', '.') }}
                             </p>
                             <p class="card-text">
                                 <strong>Stok:</strong>
-                                @if($item->stock > 10)
-                                    <span class="badge badge-success">{{ $item->stock }}</span>
-                                @elseif($item->stock > 0)
-                                    <span class="badge badge-warning">{{ $item->stock }}</span>
+                                @if($product->stock > 10)
+                                    <span class="badge badge-success">{{ $product->stock }}</span>
+                                @elseif($product->stock > 0)
+                                    <span class="badge badge-warning">{{ $product->stock }}</span>
                                 @else
-                                    <span class="badge badge-danger">{{ $item->stock }}</span>
+                                    <span class="badge badge-danger">{{ $product->stock }}</span>
                                 @endif
                             </p>
-                        </div>
-                        <div class="col-md-6">
                             <p class="card-text">
-                                <strong>Dibuat:</strong> {{ $item->created_at->format('d M Y H:i') }}
-                            </p>
-                            <p class="card-text">
-                                <strong>Diupdate:</strong> {{ $item->updated_at->format('d M Y H:i') }}
+                                <strong>Kategori:</strong> {{ $product->category ?? 'Tidak ada kategori' }}
                             </p>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">
                             <strong>Deskripsi:</strong>
-                            <p class="mt-2">{{ $item->description ?? 'Tidak ada deskripsi' }}</p>
+                            <p class="mt-2">{{ $product->description ?? 'Tidak ada deskripsi' }}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p class="card-text">
+                                <strong>Dibuat:</strong> {{ $product->created_at->format('d M Y H:i') }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text">
+                                <strong>Diupdate:</strong> {{ $product->updated_at->format('d M Y H:i') }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +88,7 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('admin.items.edit', $item) }}" class="btn btn-warning">
+                        <a href="{{ route('admin.product.edit', $product) }}" class="btn btn-warning">
                             <i class="fas fa-edit"></i> Edit Produk
                         </a>
                         <button type="button" class="btn btn-danger" onclick="confirmDelete()">
@@ -98,12 +112,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus produk "<strong>{{ $item->name }}</strong>"?</p>
+                <p>Apakah Anda yakin ingin menghapus produk "<strong>{{ $product->name }}</strong>"?</p>
                 <p class="text-danger small">Tindakan ini tidak dapat dibatalkan.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <form action="{{ route('admin.items.destroy', $item) }}" method="POST" class="d-inline">
+                <form action="{{ route('admin.product.destroy', $product) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Hapus Produk</button>
@@ -120,4 +134,3 @@ function confirmDelete() {
     $('#deleteModal').modal('show');
 }
 </script>
-@endpush

@@ -92,7 +92,7 @@ class ProductController extends Controller
         return back()->with('success', 'Produk berhasil dihapus');
     }
 
-    public function show(Item $product)
+    public function show(Product $product)
     {
         return view('admin.product.show', compact('product'));
     }

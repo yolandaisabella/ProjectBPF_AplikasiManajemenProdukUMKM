@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 t
 @section('content')
     <div class="container-fluid">
@@ -50,7 +50,11 @@ t
                                     <div class="card h-100">
                                         <div class="card-img-top" style="height: 200px; overflow: hidden;">
                                             @if($product->image)
-                                                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @if(str_starts_with($product->image, 'products/'))
+                                                    <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @else
+                                                    <img src="{{ asset($product->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">
+                                                @endif
                                             @else
                                                 @if(str_contains(strtolower($product->name), 'americano'))
                                                     <img src="{{ asset('assets-admin/img/americano.png') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $product->name }}">

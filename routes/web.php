@@ -71,11 +71,13 @@ Route::get('/register', [AuthController::class, 'register'])
 Route::post('/register', [AuthController::class, 'registerProcess'])
     ->name('register.process');
 
-Route::get('/register/staff', [AuthController::class, 'registerStaff'])
-    ->name('register.staff');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/register/staff', [AuthController::class, 'registerStaff'])
+        ->name('register.staff');
 
-Route::post('/register/staff', [AuthController::class, 'registerStaffProcess'])
-    ->name('register.staff.process');
+    Route::post('/register/staff', [AuthController::class, 'registerStaffProcess'])
+        ->name('register.staff.process');
+});
 
 
 Route::get('/logout/confirm', [AuthController::class, 'logoutConfirm'])

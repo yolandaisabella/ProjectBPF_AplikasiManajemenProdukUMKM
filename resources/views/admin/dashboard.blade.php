@@ -39,13 +39,6 @@
                                     @else
                                         <img src="{{ asset($latestProduct->image) }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
                                     @endif
-                                @else
-                                    @if(str_contains(strtolower($latestProduct->name), 'americano'))
-                                        <img src="{{ asset('assets-admin/img/americano.png') }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
-                                    @else
-                                        <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
-                                    @endif
-                                @endif
                             </div>
                             <div class="col-md-8">
                                 <h5 class="card-title">{{ $latestProduct->name }}</h5>

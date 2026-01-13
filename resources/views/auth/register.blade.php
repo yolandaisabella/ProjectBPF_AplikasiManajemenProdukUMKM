@@ -58,16 +58,6 @@
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                         </div>
 
-                        <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="form-control" id="role" name="role" required>
-                                <option value="">Pilih Role</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="staff" {{ old('role') == 'staff' ? 'selected' : '' }}>Staff</option>
-                                <option value="guest" {{ old('role') == 'guest' ? 'selected' : '' }}>Guest</option>
-                            </select>
-                        </div>
-
                         <button type="submit" class="btn btn-primary btn-block">Daftar</button>
                     </form>
 
