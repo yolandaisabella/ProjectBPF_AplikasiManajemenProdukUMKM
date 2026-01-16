@@ -103,8 +103,43 @@ class ProductController extends Controller
             'quantity' => 'required|integer|min:1|max:' . $product->stock,
         ]);
 
-        // Here you can implement actual purchase logic
-        // For now, just redirect back with success message
+        $product->stock -= $request->quantity;
+        $product->save();
+
         return redirect()->back()->with('success', 'Pembelian berhasil! Produk: ' . $product->name . ', Jumlah: ' . $request->quantity);
+    }
+
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            'items' => 'required|array|min:1',
+            'items.*.id' => 'required|integer|exists:products,id',
+            'items.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        $items = $request->items;
+        $errors = [];
+
+        // Check stock for all items first
+        foreach ($items as $itemData) {
+            $product = Product::find($itemData['id']);
+            if ($product->stock < $itemData['quantity']) {
+                $errors[] = 'Stok ' . $product->name . ' tidak mencukupi. Stok tersedia: ' . $product->stock;
+            }
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->withErrors($errors);
+        }
+
+        // Reduce stock for all items
+        foreach ($items as $itemData) {
+            $product = Product::find($itemData['id']);
+            $product->update(['stock' => $product->stock - $itemData['quantity']]);
+        }
+
+        session(['cart_cleared' => true]);
+
+        return redirect()->back()->with('success', 'Checkout berhasil! Pesanan akan segera diproses.');
     }
 }

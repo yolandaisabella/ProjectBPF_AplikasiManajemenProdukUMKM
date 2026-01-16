@@ -64,6 +64,10 @@
                                             <p class="card-text">Stok: {{ $product->stock }}</p>
                                             @if($product->stock > 0)
                                                 @auth
+                                                    <form id="purchase-form-{{ $product->id }}" action="{{ route('guest.products.purchase', $product) }}" method="POST" style="display: none;">
+                                                        @csrf
+                                                        <input type="hidden" name="quantity" value="1">
+                                                    </form>
                                                     <div class="row mt-3">
                                                         <div class="col-6">
                                                             <button type="button" class="btn btn-outline-primary btn-block" onclick="addToCart({{ $product->id }}, 1)">
@@ -143,6 +147,11 @@
         }
     }
 
+    function formatPrice(price) {
+        let formatted = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return formatted.replace(/\.00$/, '');
+    }
+
     function updateCartModal() {
         const cartItems = document.getElementById('cart-items');
         const cartTotal = document.getElementById('cart-total');
@@ -172,7 +181,7 @@
                     </div>
                     <div class="col-4">
                         <h6>${item.name}</h6>
-                        <p class="mb-1">Rp ${item.price.toLocaleString('id-ID')}</p>
+                        <p class="mb-1">Rp ${formatPrice(item.price)}</p>
                         <div class="d-flex align-items-center">
                             <button class="btn btn-sm btn-outline-secondary" onclick="changeQuantity(${item.id}, -1)">-</button>
                             <span class="mx-2">Jumlah: ${item.quantity}</span>
@@ -180,7 +189,7 @@
                         </div>
                     </div>
                     <div class="col-4 text-right">
-                        <p class="mb-0"><strong>Rp ${itemTotal.toLocaleString('id-ID')}</strong></p>
+                        <p class="mb-0"><strong>Rp ${formatPrice(itemTotal)}</strong></p>
                         <button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -190,7 +199,7 @@
         });
 
         cartItems.innerHTML = itemsHtml;
-        document.getElementById('total-price').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        document.getElementById('total-price').textContent = 'Rp ' + formatPrice(total);
         cartTotal.style.display = 'block';
         checkoutBtn.style.display = 'block';
     }
@@ -252,7 +261,10 @@
             const itemId = parseInt(checkbox.value);
             const item = cart.find(item => item.id === itemId);
             if (item) {
-                selectedItems.push(item);
+                selectedItems.push({
+                    id: item.id,
+                    quantity: item.quantity
+                });
             }
         });
 
@@ -261,25 +273,50 @@
             return;
         }
 
-        // Here you can implement the checkout logic for selected items
-        alert('Pesanan berhasil, tunggu pesanan anda siap');
-        // Remove selected items from cart
-        selectedItems.forEach(item => {
-            removeFromCart(item.id);
+        // Create form to submit checkout
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ route("guest.products.checkout") }}';
+        form.style.display = 'none';
+
+        // Add CSRF token
+        const csrfToken = document.createElement('input');
+        csrfToken.type = 'hidden';
+        csrfToken.name = '_token';
+        csrfToken.value = '{{ csrf_token() }}';
+        form.appendChild(csrfToken);
+
+        // Add selected items
+        selectedItems.forEach((item, index) => {
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = `items[${index}][id]`;
+            idInput.value = item.id;
+            form.appendChild(idInput);
+
+            const qtyInput = document.createElement('input');
+            qtyInput.type = 'hidden';
+            qtyInput.name = `items[${index}][quantity]`;
+            qtyInput.value = item.quantity;
+            form.appendChild(qtyInput);
         });
-        // Update cart counter and modal
-        updateCartCounter();
-        updateCartModal();
-        // Close the modal
-        $('#cartModal').modal('hide');
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     function purchaseProduct(productId, productName) {
         alert('Pesanan berhasil, tunggu pesanan anda siap');
+        document.getElementById('purchase-form-' + productId).submit();
     }
 
     // Initialize cart on page load
     document.addEventListener('DOMContentLoaded', function() {
+        @if(session('cart_cleared'))
+            // Clear cart if checkout was successful
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+        @endif
         updateCartCounter();
         updateCartModal();
     });

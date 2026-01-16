@@ -20,37 +20,7 @@
         </div>
         @endif
 
-        <!-- Latest Product Highlight -->
-        @if(isset($latestProduct))
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-success">Produk Terbaru</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                @if($latestProduct->image)
-                                    @if(str_starts_with($latestProduct->image, 'products/'))
-                                        <img src="{{ asset('storage/' . $latestProduct->image) }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
-                                    @else
-                                        <img src="{{ asset($latestProduct->image) }}" class="img-fluid rounded" alt="{{ $latestProduct->name }}">
-                                    @endif
-                                @endif
-                            </div>
-                            <div class="col-md-8">
-                                <h5 class="card-title">{{ $latestProduct->name }}</h5>
-                                <p class="card-text">{{ Str::limit($latestProduct->description, 200) }}</p>
-                                <p class="card-text"><strong>Rp {{ number_format($latestProduct->price, 0, ',', '.') }}</strong></p>
-                                <p class="card-text"><small class="text-muted">Stok: {{ $latestProduct->stock }}</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
+
 
         <!-- Featured Products Section -->
         <div class="row">

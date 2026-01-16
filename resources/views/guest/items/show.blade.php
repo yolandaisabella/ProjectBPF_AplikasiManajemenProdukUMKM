@@ -112,7 +112,7 @@ d@extends('layouts.guest')
                                     </button>
                                 </div>
                                 <div class="col-6">
-                                    <button type="button" class="btn btn-primary btn-block" onclick="purchaseItem()">
+                                    <button type="submit" class="btn btn-primary btn-block">
                                         <i class="fas fa-shopping-bag"></i> Beli
                                     </button>
                                 </div>

@@ -59,6 +59,7 @@ Route::middleware(['auth', 'role:guest'])->prefix('guest')->group(function () {
     Route::get('/items/{item}/purchase', [GuestItemController::class, 'purchasePage'])->name('guest.items.purchase.page');
     Route::post('/items/{item}/purchase', [GuestItemController::class, 'purchase'])->name('guest.items.purchase');
     Route::post('/products/{product}/purchase', [ProductController::class, 'purchase'])->name('guest.products.purchase');
+    Route::post('/products/checkout', [ProductController::class, 'checkout'])->name('guest.products.checkout');
 });
 
 Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
