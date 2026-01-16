@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -111,5 +111,39 @@
 <script src="{{ asset('assets-admin/js/sb-admin-2.min.js') }}"></script>
 
 @stack('scripts')
+
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Keranjang Belanja</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cart-items">
+                    <!-- Cart items will be populated here -->
+                </div>
+                <div id="cart-total" style="display: none;">
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Total:</h5>
+                        </div>
+                        <div class="col-6 text-right">
+                            <h5 id="total-price">Rp 0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="checkout-btn" style="display: none;">Beli</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+d@extends('layouts.guest')
 
 @section('content')
 <div class="container-fluid">
@@ -112,7 +112,7 @@
                                     </button>
                                 </div>
                                 <div class="col-6">
-                                    <button type="submit" class="btn btn-primary btn-block">
+                                    <button type="button" class="btn btn-primary btn-block" onclick="purchaseItem()">
                                         <i class="fas fa-shopping-bag"></i> Beli
                                     </button>
                                 </div>
@@ -144,6 +144,11 @@
     function addToCart(itemId, quantity) {
         alert('Item ditambahkan ke keranjang: ' + quantity + ' buah');
         // Here you can implement actual cart functionality
+    }
+
+    function purchaseItem() {
+        alert('Pesanan berhasil, tunggu pesanan anda siap');
+        // Here you can implement actual purchase functionality
     }
 </script>
 @endpush

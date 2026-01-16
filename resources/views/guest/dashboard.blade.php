@@ -1,5 +1,4 @@
 @extends('layouts.guest')
-t
 @section('content')
     <div class="container-fluid">
 
@@ -27,7 +26,7 @@ t
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div>
-                <h1 class="h3 mb-0 text-gray-800">Selamat Datang di UMKM Kopi Kami</h1>
+                <h1 class="h3 mb-0 text-gray-800">Selamat Datang di UMKM Kami</h1>
             </div>
         </div>
 
@@ -64,22 +63,24 @@ t
                                             <p class="card-text"><strong>Harga: Rp {{ number_format($product->price, 0, ',', '.') }}</strong></p>
                                             <p class="card-text">Stok: {{ $product->stock }}</p>
                                             @if($product->stock > 0)
-                                                <div class="row mt-3">
-                                                    <div class="col-6">
-                                                        <button type="button" class="btn btn-outline-primary btn-block" onclick="addToCart({{ $product->id }}, 1)">
-                                                            <i class="fas fa-cart-plus"></i> Keranjang
-                                                        </button>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <form action="{{ route('guest.products.purchase', $product) }}" method="POST" class="d-inline">
-                                                            @csrf
-                                                            <input type="hidden" name="quantity" value="1">
-                                                            <button type="submit" class="btn btn-primary btn-block">
+                                                @auth
+                                                    <div class="row mt-3">
+                                                        <div class="col-6">
+                                                            <button type="button" class="btn btn-outline-primary btn-block" onclick="addToCart({{ $product->id }}, 1)">
+                                                                <i class="fas fa-cart-plus"></i> Keranjang
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <button type="button" class="btn btn-primary btn-block" onclick="purchaseProduct({{ $product->id }}, '{{ $product->name }}')">
                                                                 <i class="fas fa-shopping-bag"></i> Beli
                                                             </button>
-                                                        </form>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    <div class="alert alert-warning mt-3" role="alert">
+                                                        <small>Silakan <a href="{{ route('login') }}">login</a> untuk membeli produk ini.</small>
+                                                    </div>
+                                                @endauth
                                             @else
                                                 <div class="alert alert-danger mt-3" role="alert">
                                                     Habis Stok
@@ -163,15 +164,22 @@ t
 
             itemsHtml += `
                 <div class="row mb-3 align-items-center">
+                    <div class="col-1">
+                        <input type="checkbox" class="cart-item-checkbox" value="${item.id}" onchange="updateTotal()">
+                    </div>
                     <div class="col-3">
                         <img src="${item.image ? '/storage/' + item.image : '/assets-admin/img/kopi espresso.jpg'}" class="img-fluid rounded" alt="${item.name}">
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <h6>${item.name}</h6>
                         <p class="mb-1">Rp ${item.price.toLocaleString('id-ID')}</p>
-                        <p class="mb-0">Jumlah: ${item.quantity}</p>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="changeQuantity(${item.id}, -1)">-</button>
+                            <span class="mx-2">Jumlah: ${item.quantity}</span>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="changeQuantity(${item.id}, 1)">+</button>
+                        </div>
                     </div>
-                    <div class="col-3 text-right">
+                    <div class="col-4 text-right">
                         <p class="mb-0"><strong>Rp ${itemTotal.toLocaleString('id-ID')}</strong></p>
                         <button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">
                             <i class="fas fa-trash"></i>
@@ -187,11 +195,87 @@ t
         checkoutBtn.style.display = 'block';
     }
 
+    function changeQuantity(productId, delta) {
+        const item = cart.find(item => item.id === productId);
+        if (item) {
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCounter();
+            updateCartModal();
+        }
+    }
+
     function removeFromCart(productId) {
         cart = cart.filter(item => item.id !== productId);
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCounter();
         updateCartModal();
+    }
+
+    function updateTotal() {
+        const checkboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        let selectedTotal = 0;
+
+        checkboxes.forEach(checkbox => {
+            const itemId = parseInt(checkbox.value);
+            const item = cart.find(item => item.id === itemId);
+            if (item) {
+                selectedTotal += item.price * item.quantity;
+            }
+        });
+
+        const totalPriceElement = document.getElementById('total-price');
+        if (totalPriceElement) {
+            totalPriceElement.textContent = 'Rp ' + selectedTotal.toLocaleString('id-ID');
+        }
+
+        const cartTotal = document.getElementById('cart-total');
+        if (cartTotal) {
+            cartTotal.style.display = checkboxes.length > 0 ? 'block' : 'none';
+        }
+
+        const checkoutBtn = document.getElementById('checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.style.display = checkboxes.length > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    function checkoutSelected() {
+        const checkboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        const selectedItems = [];
+
+        checkboxes.forEach(checkbox => {
+            const itemId = parseInt(checkbox.value);
+            const item = cart.find(item => item.id === itemId);
+            if (item) {
+                selectedItems.push(item);
+            }
+        });
+
+        if (selectedItems.length === 0) {
+            alert('Pilih produk yang ingin dibeli terlebih dahulu.');
+            return;
+        }
+
+        // Here you can implement the checkout logic for selected items
+        alert('Pesanan berhasil, tunggu pesanan anda siap');
+        // Remove selected items from cart
+        selectedItems.forEach(item => {
+            removeFromCart(item.id);
+        });
+        // Update cart counter and modal
+        updateCartCounter();
+        updateCartModal();
+        // Close the modal
+        $('#cartModal').modal('hide');
+    }
+
+    function purchaseProduct(productId, productName) {
+        alert('Pesanan berhasil, tunggu pesanan anda siap');
     }
 
     // Initialize cart on page load

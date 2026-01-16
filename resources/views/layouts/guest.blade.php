@@ -80,10 +80,17 @@
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="cart-link" data-toggle="modal" data-target="#cartModal">
-                            <i class="fas fa-shopping-cart fa-fw"></i>
-                            <span class="badge badge-danger badge-counter" id="cart-counter" style="display: none;">0</span>
-                        </a>
+                        @if(auth()->check())
+                            <a class="nav-link" href="#" id="cart-link" data-toggle="modal" data-target="#cartModal">
+                                <i class="fas fa-shopping-cart fa-fw"></i>
+                                <span class="badge badge-danger badge-counter" id="cart-counter" style="display: none;">0</span>
+                            </a>
+                        @else
+                            <a class="nav-link" href="#" onclick="alert('Silakan login terlebih dahulu untuk melihat keranjang.'); return false;">
+                                <i class="fas fa-shopping-cart fa-fw"></i>
+                                <span class="badge badge-danger badge-counter" id="cart-counter" style="display: none;">0</span>
+                            </a>
+                        @endif
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
@@ -118,6 +125,7 @@
 
 @stack('scripts')
 
+@if(auth()->check())
 <!-- Cart Modal -->
 <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -146,10 +154,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" id="checkout-btn" style="display: none;">Checkout</button>
+                <button type="button" class="btn btn-primary" id="checkout-btn" style="display: none;" onclick="checkoutSelected()">Beli</button>
             </div>
         </div>
     </div>
 </div>
+@endif
 </body>
 </html>
