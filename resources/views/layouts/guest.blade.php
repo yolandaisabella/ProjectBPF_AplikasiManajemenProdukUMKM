@@ -77,6 +77,22 @@
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
 
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="cart-link" data-toggle="modal" data-target="#cartModal">
+                            <i class="fas fa-shopping-cart fa-fw"></i>
+                            <span class="badge badge-danger badge-counter" id="cart-counter" style="display: none;">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-bell fa-fw"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
             <div class="container-fluid">
                 @yield('content')
             </div>
@@ -101,5 +117,39 @@
 <script src="{{ asset('assets-admin/js/sb-admin-2.min.js') }}"></script>
 
 @stack('scripts')
+
+<!-- Cart Modal -->
+<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Keranjang Belanja</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cart-items">
+                    <!-- Cart items will be populated here -->
+                </div>
+                <div id="cart-total" style="display: none;">
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Total:</h5>
+                        </div>
+                        <div class="col-6 text-right">
+                            <h5 id="total-price">Rp 0</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="checkout-btn" style="display: none;">Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

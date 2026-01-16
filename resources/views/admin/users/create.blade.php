@@ -36,22 +36,17 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
-                            @error('email')
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" required>
+                            @error('username')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="role">Role</label>
-                            <select class="form-control @error('role') is-invalid @enderror" id="role" name="role" required>
-                                <option value="">Pilih Role</option>
-                                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="staff" {{ old('role') === 'staff' ? 'selected' : '' }}>Staff</option>
-                                <option value="guest" {{ old('role') === 'guest' ? 'selected' : '' }}>Guest</option>
-                            </select>
-                            @error('role')
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
+                            @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

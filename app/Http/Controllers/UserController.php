@@ -13,16 +13,29 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
         User::create([
             'name' => $request->name,
             'username' => $request->username,
+            'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => $request->role,
+            'role' => 'staff',
         ]);
 
-        return back()->with('success', 'User berhasil ditambahkan');
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
     }
 
     public function edit(User $user)
@@ -35,7 +48,6 @@ class UserController extends Controller
         $user->update([
             'name' => $request->name,
             'username' => $request->username,
-            'role' => $request->role,
         ]);
 
         if ($request->password) {

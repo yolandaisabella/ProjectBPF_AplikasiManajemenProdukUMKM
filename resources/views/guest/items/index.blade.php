@@ -27,33 +27,28 @@
                         <div class="row">
                             @foreach($items as $item)
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card h-100">
+                                    <div class="card-img-top" style="height: 200px; overflow: hidden;">
+                                        @if($item->image)
+                                            <img src="{{ asset('storage/' . $item->image) }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $item->name }}">
+                                        @else
+                                            <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;" alt="{{ $item->name }}">
+                                        @endif
+                                    </div>
                                     <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    {{ $item->name }}
-                                                </div>
-                                                <div class="text-xs text-muted mb-2">
-                                                    Harga: Rp {{ number_format($item->price, 0, ',', '.') }}
-                                                </div>
-                                                <div class="text-xs mb-2">
-                                                    Stok: {{ $item->stock }}
-                                                </div>
-                                                <div class="text-xs">
-                                                    @if($item->stock == 0)
-                                                        <span class="badge badge-danger">Habis</span>
-                                                    @elseif($item->stock < 10)
-                                                        <span class="badge badge-warning">Stok Rendah</span>
-                                                    @else
-                                                        <span class="badge badge-success">Tersedia</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-box fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
+                                        <h5 class="card-title">{{ $item->name }}</h5>
+                                        <p class="card-text">Harga: Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                                        <p class="card-text">Stok: {{ $item->stock }}</p>
+                                        <p class="card-text">
+                                            @if($item->stock == 0)
+                                                <span class="badge badge-danger">Habis</span>
+                                            @elseif($item->stock < 10)
+                                                <span class="badge badge-warning">Stok Rendah</span>
+                                            @else
+                                                <span class="badge badge-success">Tersedia</span>
+                                            @endif
+                                        </p>
+                                        <a href="{{ route('guest.items.show', $item) }}" class="btn btn-primary btn-block">Beli</a>
                                     </div>
                                 </div>
                             </div>

@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
         // Create Admin user
         User::create([
             'name' => 'Admin UMKM',
+            'username' => 'admin',
             'email' => 'admin@umkm.com',
             'password' => Hash::make('password'),
             'role' => 'admin',
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
         // Create Staff user
         User::create([
             'name' => 'Staff UMKM',
+            'username' => 'staff',
             'email' => 'staff@umkm.com',
             'password' => Hash::make('password'),
             'role' => 'staff',
@@ -33,6 +35,7 @@ class UserSeeder extends Seeder
         // Create Guest user
         User::create([
             'name' => 'Guest UMKM',
+            'username' => 'guest',
             'email' => 'guest@umkm.com',
             'password' => Hash::make('password'),
             'role' => 'guest',

@@ -4,7 +4,7 @@
         <div class="sidebar-brand-icon">
             <i class="fas fa-store"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">UMKM Admin</div>
+        <div class="sidebar-brand-text mx-3">UMKM</div>
     </a>
 
     <hr class="sidebar-divider my-0">
@@ -24,6 +24,15 @@
             <span>Produk</span>
         </a>
     </li>
+
+    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
+    <li class="nav-item {{ request()->is('reports') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ auth()->user()->role === 'admin' ? route('admin.reports') : route('staff.reports') }}">
+            <i class="fas fa-chart-bar"></i>
+            <span>Laporan</span>
+        </a>
+    </li>
+    @endif
 
     <hr class="sidebar-divider d-none d-md-block">
 

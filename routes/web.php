@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
-
 use App\Http\Controllers\GuestItemController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\StaffController;
@@ -57,6 +56,33 @@ Route::middleware(['auth', 'role:guest'])->prefix('guest')->group(function () {
     Route::get('/products', [GuestController::class, 'products'])->name('guest.products.index');
     Route::get('/users', [GuestController::class, 'users'])->name('guest.users');
     Route::get('/reports', [GuestController::class, 'reports'])->name('guest.reports');
+    Route::get('/items/{item}/purchase', [GuestItemController::class, 'purchasePage'])->name('guest.items.purchase.page');
+    Route::post('/items/{item}/purchase', [GuestItemController::class, 'purchase'])->name('guest.items.purchase');
+    Route::post('/products/{product}/purchase', [ProductController::class, 'purchase'])->name('guest.products.purchase');
+});
+
+Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
+    Route::get('/items', [GuestItemController::class, 'index'])->name('staff.items.index');
+    Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('staff.items.show');
+    Route::get('/products', [ProductController::class, 'index'])->name('staff.products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('staff.products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('staff.products.store');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('staff.products.show');
+    Route::get('/users', [StaffController::class, 'users'])->name('staff.users');
+    Route::get('/reports', [StaffController::class, 'reports'])->name('staff.reports');
+});
+
+Route::middleware(['auth', 'role:staff'])->prefix('staff')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('staff.dashboard');
+    Route::get('/items', [GuestItemController::class, 'index'])->name('staff.items.index');
+    Route::get('/items/{item}', [GuestItemController::class, 'show'])->name('staff.items.show');
+    Route::get('/products', [ProductController::class, 'index'])->name('staff.products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('staff.products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('staff.products.store');
+    Route::get('/products/{product}', [ProductController::class, 'show'])->name('staff.products.show');
+    Route::get('/users', [StaffController::class, 'users'])->name('staff.users');
+    Route::get('/reports', [StaffController::class, 'reports'])->name('staff.reports');
 });
 
 Route::get('/login', [AuthController::class, 'login'])

@@ -16,4 +16,9 @@ class GuestItemController extends Controller
     {
         return view('guest.items.show', compact('item'));
     }
+
+    public function purchasePage(Item $item)
+    {
+        return view('guest.items.purchase', compact('item'));
+    }
 }

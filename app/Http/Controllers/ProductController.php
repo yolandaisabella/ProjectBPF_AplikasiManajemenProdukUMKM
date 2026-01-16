@@ -96,4 +96,15 @@ class ProductController extends Controller
     {
         return view('admin.product.show', compact('product'));
     }
+
+    public function purchase(Request $request, Product $product)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:' . $product->stock,
+        ]);
+
+        // Here you can implement actual purchase logic
+        // For now, just redirect back with success message
+        return redirect()->back()->with('success', 'Pembelian berhasil! Produk: ' . $product->name . ', Jumlah: ' . $request->quantity);
+    }
 }

@@ -1,16 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">gimana cara
+<div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-        <div class="d-flex">
-            <img src="{{ asset('assets-admin/img/kopi espresso.jpg') }}" alt="Kopi Espresso" class="img-fluid mr-2" style="max-height: 100px;">
-            <img src="{{ asset('assets-admin/img/americano.png') }}" alt="Kopi Americano" class="img-fluid" style="max-height: 100px;">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
         </div>
-    </div>
 
     <!-- Error Modal -->
     @if(session('error'))
